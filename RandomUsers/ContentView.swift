@@ -11,10 +11,17 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var users = [User]()
-
+    
     var body: some View {
-        List(users, id: \.name.first) { user in
-            Text(user.name.first)
+        NavigationStack {
+            List(users, id: \.name.first) { user in
+                NavigationLink {
+                    Text(user.name.first)
+                } label: {
+                    Text(user.name.first)
+                }
+            }
+            .navigationTitle("Users")
         }
         .task {
             await loadData()
@@ -30,8 +37,8 @@ struct ContentView: View {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             
-            if let decodedResult = try? JSONDecoder().decode(Result.self, from: data) {
-                users = decodedResult.results
+            if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
+                self.users = decodedResponse.results
             }
         } catch {
             print("Error: \(error.localizedDescription)")

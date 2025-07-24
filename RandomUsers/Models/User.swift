@@ -8,9 +8,9 @@
 import SwiftData
 import Foundation
 
-struct Result: Codable {
+struct Response: Codable {
     let results: [User]
-    let inf: Info
+    let info: Info
 }
 
 struct Info: Codable {
@@ -33,7 +33,6 @@ struct User: Codable {
         let city: String
         let state: String
         let country: String
-        let postcode: String
         
         struct Street: Codable {
             let number: Int
