@@ -16,9 +16,28 @@ struct ContentView: View {
         NavigationStack {
             List(users, id: \.name.first) { user in
                 NavigationLink {
-                    Text(user.name.first)
+                    UserView(user: user)
                 } label: {
-                    Text(user.name.first)
+                    HStack {
+                        AsyncImage (url: URL(string: user.picture.thumbnail)!) { image in
+                            image
+                                .resizable()
+                                .frame(width: 70, height: 70)
+                                .clipShape(.rect(cornerRadius: 15))
+                        } placeholder: {
+                            Color.red
+                        }
+                        
+                        VStack(alignment: .leading) {
+                            Text(user.name.fullName)
+                                .font(.headline)
+                            
+                            Text(user.email)
+                            
+                            Text(user.phone)
+                        }
+                        .padding([.leading])
+                    }
                 }
             }
             .navigationTitle("Users")
