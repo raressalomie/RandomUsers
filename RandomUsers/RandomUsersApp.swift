@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct RandomUsersApp: App {
-    var sharedModelContainer: ModelContainer = {
+    /*var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
         ])
@@ -21,12 +21,12 @@ struct RandomUsersApp: App {
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
+    }()*/
 
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: User.self)
     }
 }

@@ -5,64 +5,59 @@
 //  Created by Tiberiu Rares Salomie on 24/7/25.
 //
 
+import MapKit
 import SwiftData
 import Foundation
 
-struct Response: Codable {
-    let results: [User]
-    let info: Info
-}
-
-struct Info: Codable {
-    let seed: String
-    let results: Int
-    let page: Int
-    let version: String
-}
-
-struct User: Codable {
-    let gender: String
-    let name: Name
-    let location: Location
-    let email: String
-    let registered: Registered
-    let phone: String
-    let picture: Picture
-    
-    struct Location: Codable {
-        let street: Street
-        let city: String
-        let state: String
-        let country: String
-        
-        struct Street: Codable {
-            let number: Int
-            let name: String
-        }
+@Model class User: Codable {
+    enum CodingKeys: String, CodingKey {
+        case gender
+        case name
+        case location
+        case email
+        case registered
+        case phone
+        case picture
     }
     
-    struct Registered: Codable {
-        let date: String
-        let age: Int
+    init(gender: String, name: Name, location: Location, email: String, registered: Registered, phone: String, picture: Picture) {
+        self.gender = gender
+        self.name = name
+        self.location = location
+        self.email = email
+        self.registered = registered
+        self.phone = phone
+        self.picture = picture
     }
     
-    struct Name: Codable {
-        let title: String
-        let first: String
-        let last: String
-        var fullName: String {
-            String("\(title) \(first) \(last)")
-        }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        gender = try container.decode(String.self, forKey: .gender)
+        name = try container.decode(Name.self, forKey: .name)
+        location = try container.decode(Location.self, forKey: .location)
+        email = try container.decode(String.self, forKey: .email)
+        registered = try container.decode(Registered.self, forKey: .registered)
+        phone = try container.decode(String.self, forKey: .phone)
+        picture = try container.decode(Picture.self, forKey: .picture)
     }
     
-    struct Picture: Codable {
-        let large: String
-        let medium: String
-        let thumbnail: String
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(gender, forKey: .gender)
+        try container.encode(name, forKey: .name)
+        try container.encode(location, forKey: .location)
+        try container.encode(email, forKey: .email)
+        try container.encode(registered, forKey: .registered)
+        try container.encode(phone, forKey: .phone)
+        try container.encode(picture, forKey: .picture)
     }
-}
-
-struct Preview {
-    let user = User(gender: "male", name: User.Name(title: "Rares", first: "Salomie", last: "Tiberiu"), location: User.Location(street: User.Location.Street(number: 6, name: "Avenida Catalunya"), city: "Rosselló", state: "Catalonia", country: "Spain"), email: "raressalomie@gmail.com", registered: User.Registered(date: "2007-07-09T05:51:59.390Z", age: 25), phone: "642419621", picture: User.Picture(large: "https://randomuser.me/api/portraits/men/75.jpg", medium: "https://randomuser.me/api/portraits/med/men/75.jpg", thumbnail: "https://randomuser.me/api/portraits/thumb/men/75.jpg"))
+    
+    var gender: String
+    var name: Name
+    var location: Location
+    var email: String
+    var registered: Registered
+    var phone: String
+    var picture: Picture
 }
 
