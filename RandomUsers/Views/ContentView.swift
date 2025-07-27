@@ -10,52 +10,26 @@ import SwiftData
 import MapKit
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) var modelContext
     @Query private var users: [User]
-    @State private var searchText = ""
+    @Query private var deletedUsers: [DeletedUser]
+    @State private var searchText: String = ""
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(users, id: \.name.first) { user in
-                    NavigationLink {
-                        UserView(user: user, camerPosition: .camera(MapCamera(centerCoordinate: user.location.mapLocation, distance: 30000)))
-                    } label: {
-                        HStack {
-                            AsyncImage (url: URL(string: user.picture.thumbnail)!) { image in
-                                image
-                                    .resizable()
-                                    .frame(width: 70, height: 70)
-                                    .clipShape(.rect(cornerRadius: 15))
-                            } placeholder: {
-                                Image(.defaultUser)
-                                    .resizable()
-                                    .scaledToFill()
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                Text(user.name.fullName)
-                                    .font(.headline)
-                                
-                                Text(user.email)
-                                
-                                Text(user.phone)
-                            }
-                            .padding([.leading])
-                        }
+            UserListView(searchText: searchText)
+                .navigationTitle("Users")
+                .toolbar {
+                    Button("Add Sample", systemImage: "plus") {
                     }
                 }
-                .onDelete { indexSet in
-                    deleteItems(at: indexSet)
+                .searchable(text: $searchText)
+                .task {
+                    if users.isEmpty {
+                        await loadData()
+                    }
                 }
-            }
-            .navigationTitle("Users")
-            .searchable(text: $searchText)
-        }
-        .task {
-            if users.isEmpty {
-                await loadData()
-            }
+
         }
     }
     
@@ -70,32 +44,22 @@ struct ContentView: View {
             
             if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
                 for user in decodedResponse.results {
+                   // addUserIfNotDeleted(user: user)
                     modelContext.insert(user)
                 }
+                
+                try? modelContext.save()
             }
         } catch {
             print("Error: \(error.localizedDescription)")
         }
     }
     
-    private func deleteItems(at offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(users[index])
-            }
-        }
-    }
-    
-    private func search(by searchTerm: String) {
-        if !searchTerm.isEmpty {
-            
-        }
-    }
-
-   /* private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+    /*private func addUserIfNotDeleted(user: User) {
+        if !deletedUsers.contains(where: { $0.id == user.id.value }) {
+            modelContext.insert(user)
+        } else {
+            print("User with id: \(user.id.value) was deleted")
         }
     }*/
 }
