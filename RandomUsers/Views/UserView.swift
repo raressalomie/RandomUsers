@@ -56,7 +56,6 @@ struct UserView: View {
                         
                     }
                     .padding([.leading, .trailing], 25)
-                    //.border(.red, width: 10)
                 }
                 .padding([.bottom])
                 
@@ -68,6 +67,6 @@ struct UserView: View {
 
 #Preview {
     NavigationStack {
-        UserView(user: Preview().user, camerPosition: MapCameraPosition.camera(MapCamera(centerCoordinate: Preview().user.location.mapLocation, distance: 30000)))
+        UserView(user: Preview.user, camerPosition: MapCameraPosition.camera(MapCamera(centerCoordinate: Preview.user.location.mapLocation, distance: 30000)))
     }
 }

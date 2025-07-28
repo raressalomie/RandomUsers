@@ -14,6 +14,8 @@ struct ContentView: View {
     @Query private var users: [User]
     @Query private var deletedUsers: [DeletedUser]
     @State private var searchText: String = ""
+    @State private var showAlert = false
+    @State private var messageAlert = ""
     
     var body: some View {
         NavigationStack {
@@ -21,15 +23,17 @@ struct ContentView: View {
                 .navigationTitle("Users")
                 .toolbar {
                     Button("Add Sample", systemImage: "plus") {
+                        Task {
+                            await loadData()
+                        }
                     }
                 }
                 .searchable(text: $searchText)
-                .task {
-                    if users.isEmpty {
-                        await loadData()
-                    }
+                .alert("Atention!", isPresented: $showAlert) {
+                    Button("Ok", role: .cancel) {}
+                } message: {
+                    Text(messageAlert)
                 }
-
         }
     }
     
@@ -43,9 +47,16 @@ struct ContentView: View {
             let (data, _) = try await URLSession.shared.data(from: url)
             
             if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
+                if !users.isEmpty {
+                    showAlert = true
+                    messageAlert = "More user have been added at the end of the list."
+                }
+                
                 for user in decodedResponse.results {
-                   // addUserIfNotDeleted(user: user)
-                    modelContext.insert(user)
+                    if !users.contains(where: { $0.name.fullName == user.name.fullName }) {
+                        // addUserIfNotDeleted(user: user)
+                        modelContext.insert(user)
+                    }
                 }
                 
                 try? modelContext.save()
