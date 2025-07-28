@@ -5,31 +5,69 @@
 //  Created by Tiberiu Rares Salomie on 28/7/25.
 //
 
+import SwiftData
 import XCTest
+@testable import RandomUsers
 
+@MainActor
 final class UserSwiftDataTests: XCTestCase {
+    
+    private var container: ModelContainer!
+    private var context: ModelContext!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let schema = Schema([User.self])
+        
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        container = try ModelContainer(for: schema, configurations: config)
+        context = container.mainContext
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    private func fetchAllUsers() throws -> [User] {
+        try context.fetch(FetchDescriptor<User>())
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    private func fetchUsers(withEmail email: String) throws -> [User] {
+        let descriptor = FetchDescriptor<User>(
+            predicate: #Predicate { $0.email == email }
+        )
+        return try context.fetch(descriptor)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testInsertUser_PersistsAndFetchesByEmail() throws {
+        //Given
+        let user = Preview.user
+        
+        // When
+        context.insert(user)
+        try context.save()
+        
+        // Then
+        let fetched = try fetchUsers(withEmail: user.email)
+        XCTAssertEqual(fetched.count, 1, "Exactly one user with this email should exist.")
+        XCTAssertEqual(fetched.first?.email, user.email)
+        XCTAssertEqual(fetched.first?.name, user.name)
+        XCTAssertEqual(fetched.first?.location, user.location)
+        XCTAssertEqual(fetched.first?.picture, user.picture)
+        XCTAssertEqual(fetched.first?.gender, user.gender)
+        XCTAssertEqual(fetched.first?.phone, user.phone)
+    }
+    
+    func testDeleteSingleUser_RemovesItFromStore() throws {
+        let user1 = User(gender: Preview.gender, name: Preview.name, location: Preview.location, email: "user1@email.com", registered: Preview.registered, phone: Preview.phone, picture: Preview.picture)
+        let user2 = User(gender: Preview.gender, name: Preview.name, location: Preview.location, email: "user2@email.com", registered: Preview.registered, phone: Preview.phone, picture: Preview.picture)
+        context.insert(user1)
+        context.insert(user2)
+        try context.save()
+        XCTAssertEqual(try fetchAllUsers().count, 2)
+        
+        // When whe delete one user
+        context.delete(user2)
+        try context.save()
+        
+        // Then
+        XCTAssertEqual(try fetchUsers(withEmail: user2.email).count, 0, "Deleted user should not be fetchable.")
+        XCTAssertEqual(try fetchUsers(withEmail: user1.email).count, 1, "Non-deleted user should still exist.")
     }
 
 }

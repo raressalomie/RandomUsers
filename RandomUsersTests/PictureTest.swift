@@ -6,30 +6,23 @@
 //
 
 import XCTest
+@testable import RandomUsers
 
-final class PictureTest: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+final class PictureTests: XCTestCase {
+    func testPictureInitialization() {
+        let pic = Picture(
+            large: "https://example.com/large.jpg",
+            medium: "https://example.com/medium.jpg",
+            thumbnail: "https://example.com/thumb.jpg"
+        )
+        XCTAssertEqual(pic.large, "https://example.com/large.jpg")
+        XCTAssertEqual(pic.medium, "https://example.com/medium.jpg")
+        XCTAssertEqual(pic.thumbnail, "https://example.com/thumb.jpg")
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testPictureInitWithCodable() throws {
+        let data = try JSONEncoder().encode(Preview.picture)
+        let decoded = try JSONDecoder().decode(Picture.self, from: data)
+        XCTAssertEqual(decoded, Preview.picture, "Decoded JSON does not match original Pciture.")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

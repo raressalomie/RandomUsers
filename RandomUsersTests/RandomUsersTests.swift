@@ -9,28 +9,46 @@ import XCTest
 @testable import RandomUsers
 
 final class RandomUsersTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    func testUserInitialization() {
+        //Given or Arrange
+        let gender = "female"
+        let name = Name(title: "Miss", first: "Jennie", last: "Nichols")
+        let coordinates = Coordinates(latitude: "-69.8246", longitude: "134.8719")
+        let street = Street(number: 8929, name: "Valwood Pkwy")
+        let location = Location(street: street, city: "Billings", state: "Michigan", country: "United States", coordinates: coordinates)
+        let email = "jennie.nichols@example.com"
+        let registered = Registered(date: "2007-07-09T05:51:59.390Z", age: 30)
+        let phone = "(272) 790-0888"
+        let picture = Picture(large: "https://randomuser.me/api/portraits/men/75.jpg", medium: "https://randomuser.me/api/portraits/med/men/75.jpg", thumbnail: "https://randomuser.me/api/portraits/thumb/men/75.jpg")
+        
+        //When or Act
+        let user = User(gender: gender, name: name, location: location, email: email, registered: registered, phone: phone, picture: picture)
+        
+        //Then or Assert
+        XCTAssertEqual(user.gender, gender)
+        XCTAssertEqual(user.name, name)
+        XCTAssertEqual(user.location.coordinates, coordinates)
+        XCTAssertEqual(user.location.street, street)
+        XCTAssertEqual(user.location, location)
+        XCTAssertEqual(user.email, email)
+        XCTAssertEqual(user.registered, registered)
+        XCTAssertEqual(user.phone, phone)
+        XCTAssertEqual(user.picture, picture)
+        
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testUserInitWithCodable() {
+        let user = Preview.user
+        
+        do {
+            let decodedUser = try JSONDecoder().decode(User.self, from: Preview.userData)
+            dump(user)
+            dump(decodedUser)
+            
+            XCTAssertEqual(user, decodedUser, "Decoded JSON doesn't match the given User preview")
+        } catch {
+            XCTFail("Decoding fail: \(error.localizedDescription)")
         }
     }
-
 }

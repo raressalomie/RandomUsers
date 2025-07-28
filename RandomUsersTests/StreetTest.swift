@@ -6,30 +6,19 @@
 //
 
 import XCTest
+@testable import RandomUsers
 
-final class StreetTest: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+final class StreetTests: XCTestCase {
+    func testStreetInitialization() {
+        let street = Street(number: 123, name: "Main St")
+        XCTAssertEqual(street.number, 123)
+        XCTAssertEqual(street.name, "Main St")
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testStreetInitWithCodable() throws {
+        let original = Preview.street
+        let data = try JSONEncoder().encode(original)
+        let decoded = try JSONDecoder().decode(Street.self, from: data)
+        XCTAssertEqual(decoded, original, "Decoded JSON does not match original Street.")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
