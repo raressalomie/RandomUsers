@@ -38,3 +38,9 @@ import Foundation
         String("\(number) \(name)")
     }
 }
+
+extension Street: Equatable {
+    static func == (lhs: Street, rhs: Street) -> Bool {
+        lhs.number == rhs.number && lhs.name == rhs.name
+    }
+}

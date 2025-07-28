@@ -43,3 +43,11 @@ import Foundation
         String("\(title) \(first) \(last)")
     }
 }
+
+extension Name: Equatable {
+    static func == (lhs: Name, rhs: Name) -> Bool {
+        lhs.title == rhs.title &&
+        lhs.first == rhs.first &&
+        lhs.last == rhs.last
+    }
+}

@@ -61,3 +61,15 @@ import Foundation
     var picture: Picture
 }
 
+extension User: Equatable {
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.gender == rhs.gender &&
+        lhs.name == rhs.name &&
+        lhs.location == rhs.location &&
+        lhs.email == rhs.email &&
+        lhs.registered == rhs.registered &&
+        lhs.phone == rhs.phone &&
+        lhs.picture == rhs.picture
+    }
+}
+

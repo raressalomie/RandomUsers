@@ -53,3 +53,12 @@ import Foundation
         CLLocationCoordinate2D(latitude: Double(coordinates.latitude)!, longitude: Double(coordinates.latitude)!)
     }
 }
+extension Location: Equatable {
+    static func == (lhs: Location, rhs: Location) -> Bool {
+        lhs.street == rhs.street &&
+        lhs.city == rhs.city &&
+        lhs.state == rhs.state &&
+        lhs.country == rhs.country &&
+        lhs.coordinates == rhs.coordinates
+    }
+}

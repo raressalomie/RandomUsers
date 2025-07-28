@@ -34,3 +34,10 @@ import Foundation
     var latitude: String
     var longitude: String
 }
+
+extension Coordinates: Equatable {
+    static func == (lhs: Coordinates, rhs: Coordinates) -> Bool {
+        lhs.latitude == rhs.latitude &&
+        lhs.longitude == rhs.longitude
+    }
+}

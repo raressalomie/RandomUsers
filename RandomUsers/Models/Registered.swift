@@ -34,3 +34,10 @@ import Foundation
     var date: String
     var age: Int
 }
+
+extension Registered: Equatable {
+    static func == (lhs: Registered, rhs: Registered) -> Bool {
+        lhs.date == rhs.date &&
+        lhs.age == rhs.age 
+    }
+}

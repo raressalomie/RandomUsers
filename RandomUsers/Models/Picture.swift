@@ -39,3 +39,11 @@ import Foundation
     var medium: String
     var thumbnail: String
 }
+
+extension Picture: Equatable {
+    static func == (lhs: Picture, rhs: Picture) -> Bool {
+        lhs.large == rhs.large &&
+        lhs.medium == rhs.medium &&
+        lhs.thumbnail == rhs.thumbnail
+    }
+}
