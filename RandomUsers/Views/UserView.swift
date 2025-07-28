@@ -42,6 +42,7 @@ struct UserView: View {
                         Text("Street: \(user.location.street.fullStreet)")
                         Text("City: \(user.location.city)")
                         Text("State: \(user.location.state)")
+                        Text("Registered: \(user.registered.date)")
                         
                         
                         Map(position: $camerPosition) {
