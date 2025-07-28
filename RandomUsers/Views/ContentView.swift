@@ -12,7 +12,6 @@ import MapKit
 struct ContentView: View {
     @Environment(\.modelContext) var modelContext
     @Query private var users: [User]
-    @Query private var deletedUsers: [DeletedUser]
     @State private var searchText: String = ""
     @State private var showAlert = false
     @State private var messageAlert = ""
