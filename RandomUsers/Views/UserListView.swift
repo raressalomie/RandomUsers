@@ -84,7 +84,6 @@ struct UserListView: View {
             if let decodedResponse = try? JSONDecoder().decode(Response.self, from: data) {
                 for user in decodedResponse.results {
                     if !users.contains(where: { $0.name.fullName == user.name.fullName }) {
-                        // addUserIfNotDeleted(user: user)
                         modelContext.insert(user)
                     }
                 }
@@ -100,7 +99,6 @@ struct UserListView: View {
     private func deleteItems(at offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                //modelContext.insert(DeletedUser(id: users[index].id.value))
                 modelContext.delete(users[index])
             }
         }

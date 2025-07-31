@@ -53,11 +53,6 @@
 			path = RandomUsersTests;
 			sourceTree = "<group>";
 		};
-		923F04132E32442D0028F1A2 /* RandomUsersUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RandomUsersUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +85,6 @@
 			children = (
 				923F03F62E32442B0028F1A2 /* RandomUsers */,
 				923F04092E32442D0028F1A2 /* RandomUsersTests */,
-				923F04132E32442D0028F1A2 /* RandomUsersUITests */,
 				923F03F52E32442B0028F1A2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,9 +159,6 @@
 			);
 			dependencies = (
 				923F04122E32442D0028F1A2 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				923F04132E32442D0028F1A2 /* RandomUsersUITests */,
 			);
 			name = RandomUsersUITests;
 			packageProductDependencies = (
@@ -411,7 +402,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"RandomUsers/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = /Users/trsalomie/Documents/Repos/RandomUsers/RandomUsers/Resources/Info.plist;
+				INFOPLIST_FILE = "$(PROJECT_DIR)/RandomUsers/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -440,7 +431,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"RandomUsers/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = /Users/trsalomie/Documents/Repos/RandomUsers/RandomUsers/Resources/Info.plist;
+				INFOPLIST_FILE = "$(PROJECT_DIR)/RandomUsers/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

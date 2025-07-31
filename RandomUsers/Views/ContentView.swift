@@ -64,14 +64,6 @@ struct ContentView: View {
             print("Error: \(error.localizedDescription)")
         }
     }
-    
-    /*private func addUserIfNotDeleted(user: User) {
-        if !deletedUsers.contains(where: { $0.id == user.id.value }) {
-            modelContext.insert(user)
-        } else {
-            print("User with id: \(user.id.value) was deleted")
-        }
-    }*/
 }
 
 #Preview {
